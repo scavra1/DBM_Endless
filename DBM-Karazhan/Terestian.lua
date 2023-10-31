@@ -8,15 +8,15 @@ mod:SetModelID(11343)
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 30115 30065",
-	"SPELL_AURA_REMOVED 30115",
-	"SPELL_CAST_SUCCESS 30066"
+mod:RegisterEvents(
+	"SPELL_AURA_APPLIED",
+	"SPELL_AURA_REMOVED",
+	"SPELL_CAST_SUCCESS"
 )
 
-local warningWeakened	= mod:NewTargetNoFilterAnnounce(30065, 2)
+local warningWeakened	= mod:NewTargetAnnounce(30065, 2)
 local warningImp		= mod:NewSpellAnnounce(30066, 3)
-local warningSacrifice	= mod:NewTargetNoFilterAnnounce(30115, 4)
+local warningSacrifice	= mod:NewTargetAnnounce(30115, 4)
 
 local specWarnSacrifice	= mod:NewSpecialWarningYou(30115, nil, nil, nil, 1, 2)
 local yellSacrifice		= mod:NewYell(30115)

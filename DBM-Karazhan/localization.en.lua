@@ -96,14 +96,14 @@ L:SetMiscLocalization{
 ---------------------
 L = DBM:GetModLocalization("TerestianIllhoof")
 
-L:SetGeneralLocalization({
+L:SetGeneralLocalization{
 	name = "Terestian Illhoof"
-})
+}
 
-L:SetMiscLocalization({
+L:SetMiscLocalization{
 	Kilrek					= "Kil'rek",
 	DChains					= "Demon Chains"
-})
+}
 
 
 ---------------------

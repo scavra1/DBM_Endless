@@ -7,10 +7,10 @@ mod:SetCreatureID(18831, 18832, 18834, 18835, 18836)
 mod:SetModelID(18831)
 mod:RegisterCombat("combat")
 
-mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 33238 33054 33147",
-	"SPELL_CAST_START 33152 33144",
-	"SPELL_CAST_SUCCESS 33131"
+mod:RegisterEvents(
+	"SPELL_AURA_APPLIED",
+	"SPELL_CAST_START",
+	"SPELL_CAST_SUCCESS"
 )
 
 --Maulgar
