@@ -1,17 +1,18 @@
+if GetLocale() ~= "esES" and GetLocale() ~= "esMX" then return end
 local L
 
 --Maulgar
 L = DBM:GetModLocalization("Maulgar")
 
 L:SetGeneralLocalization({
-	name = "High King Maulgar"
+	name = "Su majestad Maulgar"
 })
 
 --Gruul the Dragonkiller
 L = DBM:GetModLocalization("Gruul")
 
 L:SetGeneralLocalization({
-	name = "Gruul the Dragonkiller"
+	name = "Gruul el Asesino de Dragones"
 })
 
 L:SetWarningLocalization({
@@ -19,8 +20,5 @@ L:SetWarningLocalization({
 })
 
 L:SetOptionLocalization({
-	WarnGrowth		= "Show warning for $spell:36300",
-	RangeDistance	= "Range frame distance for $spell:33654",
-	Smaller			= "Smaller distance (11)",
-	Safe			= "Safer distance (18)"
+	WarnGrowth	= "Mostrar aviso para $spell:36300"
 })

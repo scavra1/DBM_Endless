@@ -1,17 +1,19 @@
+if GetLocale() ~= "zhTW" then return end
+
 local L
 
 --Maulgar
 L = DBM:GetModLocalization("Maulgar")
 
 L:SetGeneralLocalization({
-	name = "High King Maulgar"
+	name = "大君王莫卡爾"
 })
 
 --Gruul the Dragonkiller
 L = DBM:GetModLocalization("Gruul")
 
 L:SetGeneralLocalization({
-	name = "Gruul the Dragonkiller"
+	name = "弒龍者戈魯爾"
 })
 
 L:SetWarningLocalization({
@@ -19,8 +21,5 @@ L:SetWarningLocalization({
 })
 
 L:SetOptionLocalization({
-	WarnGrowth		= "Show warning for $spell:36300",
-	RangeDistance	= "Range frame distance for $spell:33654",
-	Smaller			= "Smaller distance (11)",
-	Safe			= "Safer distance (18)"
+	WarnGrowth	= "為$spell:36300顯示警告"
 })
