@@ -1,36 +1,39 @@
 local mod	= DBM:NewMod("Curator", "DBM-Karazhan")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 4181 $"):sub(12, -3))
-
+mod:SetRevision("20220518110528")
 mod:SetCreatureID(15691)
 
+mod:SetModelID(16958)
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
-    "SPELL_AURA_APPLIED",
-    "SPELL_AURA_REMOVED",
-	"CHAT_MSG_MONSTER_YELL"
-);
+mod:RegisterEventsInCombat(
+	"SPELL_AURA_APPLIED 30254 30403",
+	"SPELL_CAST_SUCCESS 30235"
+)
 
--- Timers & Warnings
-local timerNextEvocation    = mod:NewNextTimer(90, 30254)
-local warnEvocationSoon     = mod:NewSoonAnnounce(30254, 3)
+--TODO, fix evocate timer in classic TBC, it was fucked with on retail and kinda broken but should work fine in TBC
+--EDIT, it seems there is a max evo timer of 115, but if you kill sparks early he spawns new ones early and if you keep doing this you caan shorten timer considerably
+--As such, this mod would need to recheck boss energy every time adds spawn and live update timer off UNIT_POWER maybe?
+--ability.id = 30254 and type = "cast"
+local warnAdd			= mod:NewAnnounce("warnAdd", 3, "136116")
+local warnEvo			= mod:NewSpellAnnounce(30254, 2)
+local warnArcaneInfusion= mod:NewSpellAnnounce(30403, 4)
 
-local announceFlares		= mod:NewAnnounce("AnnounceFlares")
+local timerEvo			= mod:NewBuffActiveTimer(20, 30254, nil, nil, nil, 6)
+--local timerNextEvo		= mod:NewNextTimer(115, 30254, nil, nil, nil, 6)
 
+local berserkTimer		= mod:NewBerserkTimer(720)
 
--- Custom options
-mod:AddBoolOption("RangeFrame")
+mod:AddRangeFrameOption("10", nil, true)
 
--- Vars
-local flaresCount = 0
+local addGUIDS = {}
 
 function mod:OnCombatStart(delay)
-    flaresCount = 0
-    timerNextEvocation:Start(-delay)
-
-    if self.Options.RangeFrame then
+	table.wipe(addGUIDS)
+	berserkTimer:Start(-delay)
+--	timerNextEvo:Start(-delay)
+	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(10)
 	end
 end
@@ -42,31 +45,21 @@ function mod:OnCombatEnd()
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(30254) then -- Evocation
-        flaresCount = 0
-    end
+	if args.spellId == 30254 then
+		warnEvo:Show()
+		timerEvo:Start()
+--		timerNextEvo:Start()
+	elseif args.spellId == 30403 then
+		warnArcaneInfusion:Show()
+--		timerNextEvo:Stop()
+	end
 end
 
-function mod:SPELL_AURA_REMOVED(args)
-    if args:IsSpellID(30254) then -- Evocation ended
-        timerNextEvocation:Start(90)
-    end
+function mod:SPELL_CAST_SUCCESS(args)
+	if args.spellId == 30235 and not addGUIDS[args.sourceGUID] then
+		addGUIDS[args.sourceGUID] = true
+		if self:AntiSpam(3, 1) then
+			warnAdd:Show()
+		end
+	end
 end
-
-function mod:CHAT_MSG_MONSTER_YELL(msg)
-    if msg == L.FlareSpawnedYell1 
-        or msg == L.FlareSpawnedYell2 
-        or msg:find(L.FlareSpawnedYell1) 
-        or msg:find(L.FlareSpawnedYell2) then
-            
-            flaresCount = flaresCount + 1
-
-            announceFlares:Show(flaresCount)
-
-            if flaresCount == 8 then
-                warnEvocationSoon:Schedule(5)
-            end
-    end
-end
-
-

@@ -1,51 +1,45 @@
 local mod	= DBM:NewMod("Attumen", "DBM-Karazhan")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 4181 $"):sub(12, -3))
+mod:SetRevision("20220518110528")
+mod:SetCreatureID(16151, 16152)--15550
 
-mod:SetCreatureID(16152)
+mod:SetModelID(16416)
+mod:SetBossHPInfoToHighest()
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
-	"SPELL_AURA_APPLIED",
-	"SPELL_AURA_REMOVED",
-    "CHAT_MSG_MONSTER_YELL",
-    "CHAT_MSG_MONSTER_EMOTE",
+mod:RegisterEventsInCombat(
+	"SPELL_CAST_SUCCESS 29711 29833",
+	"SPELL_SUMMON 29714 29799",
 	"UNIT_DIED"
 )
 
-local warnPhase2 = mod:NewPhaseAnnounce(2);
-local warnPhase3 = mod:NewPhaseAnnounce(3);
-local specWarnCurse = mod:NewSpecialWarningSpell(29833)
+local warnKnockdown	= mod:NewSpellAnnounce(29711, 4)
+local warningCurse	= mod:NewSpellAnnounce(29833, 4)
+local warnPhase2	= mod:NewPhaseAnnounce(2)
 
-function mod:OnCombatStart(delay)
+local timerCurseCD	= mod:NewCDTimer(27, 43127, nil, nil, nil, 3, nil, DBM_COMMON_L.CURSE_ICON)
+
+function mod:OnCombatStart()
+	self:SetStage(1)
 end
 
-
-local function IsPlayerDispeller()
-	return 
-	(select(2, UnitClass("player")) == "DRUID" and not select(3, GetTalentTabInfo(2)) >= 40)
-	or select(2, UnitClass("player")) == "MAGE"
-end
-
-function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(29833) then
-		if IsPlayerDispeller() then
-			specWarnCurse:Show()
-		end
+function mod:SPELL_CAST_SUCCESS(args)
+	if args.spellId == 29711 then
+		warnKnockdown:Show()
+	elseif args.spellId == 29833 then
+		warningCurse:Show()
+		timerCurseCD:Start(self.vb.phase == 2 and 30.5 or 27.8)
 	end
 end
 
-function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.Phase3Yell or msg:find(L.Phase3Yell) then
-		warnPhase3:Show()
-	end
-end
-
-function mod:CHAT_MSG_MONSTER_EMOTE(msg)
-	if msg == L.Phase2Emote or msg:find(L.Phase2Emote) then
+function mod:SPELL_SUMMON(args)
+	if args.spellId == 29799 then
+		self:SetStage(2)
 		warnPhase2:Show()
+		timerCurseCD:Start(20.2)
+	-- elseif args.spellId == 29714 then -- when attument arrives
 	end
 end
 
