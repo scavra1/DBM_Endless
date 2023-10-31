@@ -39,3 +39,15 @@ luac.out
 *.x86_64
 *.hex
 
+*
+AtlasLoot/
+!DBM-Core/
+!DBM-Core/*
+!DBM-Gruul/
+!DBM-Gruul/*
+!DBM-GUI/
+!DBM-GUI/*
+!DBM-Karazhan/
+!DBM-Karazhan/*
+!DBM-Party-WotLK/
+!DBM-Party-WotLK/*
