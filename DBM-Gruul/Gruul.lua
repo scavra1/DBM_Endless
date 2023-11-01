@@ -1,35 +1,34 @@
 local mod	= DBM:NewMod("Gruul", "DBM-Gruul")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20220518110528")
+mod:SetRevision(("$Revision: 4181 $"):sub(12, -3))
+
 mod:SetCreatureID(19044)
 
 mod:SetModelID(19044)
 mod:RegisterCombat("combat")
 
-mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 33525 33654",
-	"SPELL_CAST_SUCCESS 36297",
-	"SPELL_AURA_APPLIED 36300 36240",
-	"SPELL_AURA_APPLIED_DOSE 36300"
+mod:RegisterEvents(
+	"SPELL_CAST_START",
+	"SPELL_CAST_SUCCESS",
+	"SPELL_AURA_APPLIED",
+	"SPELL_AURA_APPLIED_DOSE"
 )
 
-local warnGrowth		= mod:NewStackAnnounce(36300, 2)
+local warnGrowth		= mod:NewSpecialWarningStack(36300, nil, 20)
 local warnGroundSlam	= mod:NewSpellAnnounce(33525, 3)
 local warnShatter		= mod:NewSpellAnnounce(33654, 4)
 local warnSilence		= mod:NewSpellAnnounce(36297, 4)
 
-local specWarnCaveIn	= mod:NewSpecialWarningGTFO(36240, nil, nil, nil, 1, 6)
-local specWarnShatter	= mod:NewSpecialWarningMoveAway(33654, nil, nil, nil, 1, 6)
+local specWarnCaveIn	= mod:NewSpecialWarningMove(36240)
 
-local timerGrowthCD		= mod:NewNextTimer(30, 36300, nil, nil, nil, 6)
-local timerGroundSlamCD	= mod:NewCDTimer(64, 33525, nil, nil, nil, 2)
-local timerShatterCD	= mod:NewNextTimer(10, 33654, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1, 4)
+local timerGrowthCD		= mod:NewNextTimer(30, 36300)
+local timerGroundSlamCD	= mod:NewCDTimer(64, 33525)
+local timerShatterCD	= mod:NewNextTimer(10, 33654)
 
-local timerSilenceCD	= mod:NewCDTimer(20, 36297, nil, nil, nil, 5, nil, DBM_COMMON_L.HEALER_ICON)
+local timerSilenceCD	= mod:NewNextTimer(20, 36297)
 
-mod:AddRangeFrameOption(mod.Options.RangeDistance == "Smaller" and 11 or 18, 33654)
-mod:AddDropdownOption("RangeDistance", {"Smaller", "Safe"}, "Safe", "misc")
+
 
 local silenceParity = true
 
@@ -39,7 +38,7 @@ function mod:OnCombatStart(delay)
 	timerGrowthCD:Start(-delay)
 	timerGroundSlamCD:Start(35-delay)
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(self.Options.RangeDistance == "Smaller" and 11 or 18)
+		DBM.RangeCheck:Show(10)
 	end
 end
 
@@ -54,8 +53,6 @@ function mod:SPELL_CAST_START(args)
 		warnGroundSlam:Show()
 		timerShatterCD:Start()
 		timerGroundSlamCD:Start()
-		specWarnShatter:Schedule(3)
-		specWarnShatter:ScheduleVoice(3, "scatter")
 	elseif args.spellId == 33654 then--Shatter
 		warnShatter:Show()
 	end
