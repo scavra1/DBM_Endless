@@ -64,6 +64,8 @@ luac.out
 !DBM-SpellTimers/
 !DBM-SpellTimers/**
 !DBM-StatusBarTimers/
+!DBM-StatusBarTimers/textures/
+!DBM-StatusBarTimers/textures/*
 !DBM-StatusBarTimers/**
 !DBM-Sunwell/
 !DBM-Sunwell/**
