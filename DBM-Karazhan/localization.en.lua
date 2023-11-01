@@ -38,6 +38,10 @@ L:SetGeneralLocalization({
 	name = "Romulo and Julianne"
 })
 
+L:SetOptionLocalization({
+	MarkHolyFireTarget		= "Set icon on $spell:29522 target"
+})
+
 L:SetMiscLocalization({
 	Event				= "Tonight... we explore a tale of forbidden love!",
 	RJ_Pull				= "What devil art thou, that dost torment me thus?",
@@ -101,12 +105,17 @@ L:SetGeneralLocalization({
 	name = "The Curator"
 })
 
-L:SetWarningLocalization({
-	warnAdd		= "Add spawned"
-})
+L:SetWarningLocalization{
+	AnnounceFlares = "Flare # %d"
+}
 
 L:SetOptionLocalization({
 	warnAdd		= "Show warning when add spawned"
+})
+
+L:SetMiscLocalization({
+	FlareSpawnedYell1 = "This Curator is equipped for gallery protection.",
+	FlareSpawnedYell2 = "Gallery rules will be strictly enforced."
 })
 
 -- Terestian Illhoof
@@ -159,6 +168,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	SetIconOnBreathTarget	= "Set icon on $spell:38523 target",
 	warningPortal			= "Show warning for Portal phase",
 	warningBanish			= "Show warning for Banish phase",
 	timerPortalPhase		= "Show timer for Portal Phase duration",

@@ -26,7 +26,7 @@ local warningHolyLight		= mod:NewCastAnnounce(29562, 3, nil, nil, "HasInterrupt"
 local specWarnGreaterHeal	= mod:NewSpecialWarningInterrupt(35096, "HasInterrupt", nil, nil, 1, 2)
 local specWarnHolyLight		= mod:NewSpecialWarningInterrupt(29562, "HasInterrupt", nil, nil, 1, 2)
 
-local timerVanishCD			= mod:NewCDTimer(35.1, 29448, nil, nil, nil, 6)--35.1-51.8
+local timerVanishCD			= mod:NewCDTimer(30, 29448, nil, nil, nil, 6)--35.1-51.8
 local timerGougeCD			= mod:NewCDTimer(22.6, 29448, nil, "Tank", nil, 6)--22.6-43.6
 local timerGouge			= mod:NewTargetTimer(6, 29425, nil, false, nil, 3)
 local timerBlind			= mod:NewTargetTimer(10, 34694, nil, false, nil, 3)
@@ -60,7 +60,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 29448 then
 		warningVanish:Show()
-		timerVanishCD:Start()
+		timerVanishCD:Start(39)
 	elseif args.spellId == 29425 then
 		warningGouge:Show(args.destName)
 		timerGouge:Show(args.destName)

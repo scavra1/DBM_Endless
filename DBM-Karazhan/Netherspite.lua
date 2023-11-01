@@ -13,18 +13,20 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
 
+local announceNetherBreathTarget    = mod:NewTargetAnnounce(38523, 3)
+local specWarnNetherBreathTargetYou	= mod:NewSpecialWarningYou(38523, nil, nil, nil, 3, 2)
+
 local warningPortal			= mod:NewAnnounce("warningPortal", 1, "135743")
 local warningBanish			= mod:NewAnnounce("warningBanish", 1, "136135")
-local warningBreathCast		= mod:NewCastAnnounce(38523, 2)
-local warningVoid			= mod:NewSpellAnnounce(37063, 4)
 
 local specWarnVoid			= mod:NewSpecialWarningGTFO(30533, nil, nil, nil, 1, 6)
 
-local timerPortalPhase		= mod:NewTimer(61.5, "timerPortalPhase", "135743", nil, nil, 6)
+local timerPortalPhase		= mod:NewTimer(60, "timerPortalPhase", "135743", nil, nil, 6)
 local timerBanishPhase		= mod:NewTimer(30, "timerBanishPhase", "136135", nil, nil, 6)
-local timerBreathCast		= mod:NewCastTimer(2.5, 38523, nil, nil, nil, 3)
 
 local berserkTimer			= mod:NewBerserkTimer(540)
+
+mod:AddBoolOption("SetIconOnBreathTarget")
 
 function mod:OnCombatStart(delay)
 	berserkTimer:Start(-delay)
@@ -43,15 +45,22 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args.spellId == 38523 then
-		warningBreathCast:Show()
-		timerBreathCast:Start()
+		local targetName = UnitName("boss1target")
+        if targetName then
+            announceNetherBreathTarget:Show(args.destName)
+           
+            if targetName == UnitName("player") then
+                specWarnNetherBreathTargetYou:Show()
+            end
+            
+            if self.Options.SetIconOnBreathTarget then
+                self:SetIcon(args.destName, 8)
+            end
+        end
 	end
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(37014, 37063) then
-		warningVoid:Show()
-	end
 end
 
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, destGUID, _, _, spellId, spellName)

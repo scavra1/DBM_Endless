@@ -37,7 +37,7 @@ local timerEnfeeble				= mod:NewBuffFadesTimer(9, 30843)
 
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
-	timerNextInfernal:Start(14.5-delay)--14-21?
+	timerNextInfernal:Start(25-delay)
 	timerEnfeebleCD:Start(30-delay)
 end
 
@@ -81,8 +81,8 @@ end
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
 		warningInfernal:Show()
-		timerHellfire:Start(14.5)--14-16
-		timerNextInfernal:Start(self.vb.phase == 3 and 19.3 or 44.7)--44-48
+		timerHellfire:Start(14.5)
+		timerNextInfernal:Start(self.vb.phase == 3 and 30 or 45)
 	elseif msg == L.DBM_PRINCE_YELL_P3 then
 		self:SendSync("Phase3")
 	elseif msg == L.DBM_PRINCE_YELL_P2 then
@@ -108,9 +108,8 @@ function mod:OnSync(msg)
 		timerNovaCD:Stop()
 		timerNextInfernal:Stop()
 		timerEnfeebleCD:Stop()
-		timerNovaCD:Start(19.2)
 		--"<326.45 01:12:48> [DBM_Announce] Stage 3#136116#stage#3#Prince#false", -- [759]
 		--"<366.46 01:13:28> [CHAT_MSG_MONSTER_YELL] You face not Malchezaar alone, but the legions I command!#Prince Malchezaar#####0#0##0#163#nil#0#false#false#false#false", -- [883]
-		timerNextInfernal:Start(40)
+		timerNextInfernal:Start(15)
 	end
 end
