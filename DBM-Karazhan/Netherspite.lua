@@ -30,7 +30,7 @@ mod:AddBoolOption("SetIconOnBreathTarget")
 
 function mod:OnCombatStart(delay)
 	berserkTimer:Start(-delay)
-	timerPortalPhase:Start(63.5-delay)
+	timerPortalPhase:Start(60-delay)
 	if not self:IsTrivial() then
 		self:RegisterShortTermEvents(
 			"SPELL_PERIODIC_DAMAGE 30533",
@@ -47,14 +47,14 @@ function mod:SPELL_CAST_START(args)
 	if args.spellId == 38523 then
 		local targetName = UnitName("boss1target")
         if targetName then
-            announceNetherBreathTarget:Show(args.destName)
+            announceNetherBreathTarget:Show(targetName)
            
             if targetName == UnitName("player") then
                 specWarnNetherBreathTargetYou:Show()
             end
             
             if self.Options.SetIconOnBreathTarget then
-                self:SetIcon(args.destName, 8)
+                self:SetIcon(targetName, 8)
             end
         end
 	end
@@ -72,11 +72,11 @@ end
 mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
-	if msg == L.DBM_NS_EMOTE_PHASE_2 then
+	if msg == L.DBM_NS_EMOTE_PHASE_2 or msg:find(L.DBM_NS_EMOTE_PHASE_2) then
 		timerPortalPhase:Cancel()
 		warningBanish:Show()
 		timerBanishPhase:Start()
-	elseif msg == L.DBM_NS_EMOTE_PHASE_1 then
+	elseif msg == L.DBM_NS_EMOTE_PHASE_1 or msg:find(L.DBM_NS_EMOTE_PHASE_2) then
 		timerBanishPhase:Cancel()
 		warningPortal:Show()
 		timerPortalPhase:Start()

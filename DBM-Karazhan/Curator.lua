@@ -9,8 +9,7 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 30254 30403",
-	"SPELL_CAST_SUCCESS 30235",
-	"CHAT_MSG_MONSTER_YELL"
+	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
 
 
@@ -53,15 +52,6 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args.spellId == 30403 then
 		warnArcaneInfusion:Show()
 		timerNextEvo:Stop()
-	end
-end
-
-function mod:SPELL_CAST_SUCCESS(args)
-	if args.spellId == 30235 and not addGUIDS[args.sourceGUID] then
-		addGUIDS[args.sourceGUID] = true
-		if self:AntiSpam(3, 1) then
-			flareAnnounce:Show()
-		end
 	end
 end
 

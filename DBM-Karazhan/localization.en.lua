@@ -177,7 +177,7 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	DBM_NS_EMOTE_PHASE_2	= "%s goes into a nether-fed rage!",
-	DBM_NS_EMOTE_PHASE_1	= "%s cries out in withdrawal, opening gates to the nether."
+	DBM_NS_EMOTE_PHASE_1	= "%s cries out in withdrawal, opening gates to the warp."
 })
 
 --Chess
