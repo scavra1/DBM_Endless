@@ -17,6 +17,6 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	DBM_MAG_EMOTE_PULL		= "%s's bonds begin to weaken!",
-	DBM_MAG_YELL_PHASE2		= "I... am... unleashed!",
-	DBM_MAG_YELL_PHASE3		= "I will not be taken so easily! Let the walls of this prison tremble... and fall!"
+	DBM_MAG_YELL_PHASE2		= "I... am... UNLEASHED!",
+	DBM_MAG_YELL_PHASE3		= "I will not be taken so easily! Let the walls of this prison tremble... and FALL!"
 })

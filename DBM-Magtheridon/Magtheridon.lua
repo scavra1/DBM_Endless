@@ -24,10 +24,11 @@ local specWarnHeal			= mod:NewSpecialWarningInterrupt(30528, "HasInterrupt", nil
 
 local timerHeal				= mod:NewCastTimer(2, 30528, nil, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
 local timerPhase2			= mod:NewTimer(120, "timerP2", "135566", nil, nil, 6)
-local timerBlastNovaCD		= mod:NewCDCountTimer(54, 30616, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
+local timerBlastNovaCD		= mod:NewCDCountTimer(64, 30616, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
 local timerDebris			= mod:NewNextTimer(15, 36449, nil, nil, nil, 2, nil, DBM_COMMON_L.HEALER_ICON..DBM_COMMON_L.TANK_ICON)--Only happens once per fight, after the phase 3 yell.
 
 mod.vb.blastNovaCounter = 1
+
 
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
@@ -48,7 +49,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.blastNovaCounter = self.vb.blastNovaCounter + 1
 		specWarnBlastNova:Show(L.name)
 		specWarnBlastNova:Play("kickcast")
-		timerBlastNovaCD:Start(nil, self.vb.blastNovaCounter)
+		timerBlastNovaCD:Start(45, self.vb.blastNovaCounter)
 	end
 end
 
@@ -62,7 +63,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.DBM_MAG_YELL_PHASE2 or msg:find(L.DBM_MAG_YELL_PHASE2) then
 		self:SetStage(2)
 		warnPhase2:Show()
-		timerBlastNovaCD:Start(nil, self.vb.blastNovaCounter)
+		timerBlastNovaCD:Start(45, self.vb.blastNovaCounter)
 		timerPhase2:Cancel()
 	elseif msg == L.DBM_MAG_YELL_PHASE3 or msg:find(L.DBM_MAG_YELL_PHASE3) then
 		self:SetStage(3)

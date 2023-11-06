@@ -9,11 +9,11 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 30254 30403",
-	"CHAT_MSG_RAID_BOSS_EMOTE"
+	"CHAT_MSG_MONSTER_EMOTE"
 )
 
 
-local flareAnnounce			= mod:NewAnnounce("AnnounceFlares", 3, "136116")
+local flareAnnounce			= mod:NewAnnounce("AnnounceFlares", 2, 136116)
 local warnEvocationSoon     = mod:NewSoonAnnounce(30254, 3)
 
 local warnArcaneInfusion	= mod:NewSpellAnnounce(30403, 4)
@@ -48,14 +48,14 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 30254 then
 		timerEvo:Start()
-		timerNextEvo:Start(110)
+		timerNextEvo:Start(100)
 	elseif args.spellId == 30403 then
 		warnArcaneInfusion:Show()
 		timerNextEvo:Stop()
 	end
 end
 
-function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
+function mod:CHAT_MSG_MONSTER_EMOTE(msg)
 	if msg == L.FlareSpawnedYell1 
 	or msg == L.FlareSpawnedYell2 
 	or msg:find(L.FlareSpawnedYell1) 

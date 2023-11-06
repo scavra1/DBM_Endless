@@ -10,7 +10,7 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 38523",
 	"SPELL_CAST_SUCCESS 37014 37063",
-	"CHAT_MSG_RAID_BOSS_EMOTE"
+	"CHAT_MSG_MONSTER_EMOTE"
 )
 
 local announceNetherBreathTarget    = mod:NewTargetAnnounce(38523, 3)
@@ -71,12 +71,12 @@ function mod:SPELL_PERIODIC_DAMAGE(_, _, _, destGUID, _, _, spellId, spellName)
 end
 mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
 
-function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
+function mod:CHAT_MSG_MONSTER_EMOTE(msg)
 	if msg == L.DBM_NS_EMOTE_PHASE_2 or msg:find(L.DBM_NS_EMOTE_PHASE_2) then
 		timerPortalPhase:Cancel()
 		warningBanish:Show()
 		timerBanishPhase:Start()
-	elseif msg == L.DBM_NS_EMOTE_PHASE_1 or msg:find(L.DBM_NS_EMOTE_PHASE_2) then
+	elseif msg == L.DBM_NS_EMOTE_PHASE_1 or msg:find(L.DBM_NS_EMOTE_PHASE_1) then
 		timerBanishPhase:Cancel()
 		warningPortal:Show()
 		timerPortalPhase:Start()
