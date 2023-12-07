@@ -16,13 +16,13 @@ mod:RegisterEventsInCombat(
 local announceNetherBreathTarget    = mod:NewTargetAnnounce(38523, 3)
 local specWarnNetherBreathTargetYou	= mod:NewSpecialWarningYou(38523, nil, nil, nil, 3, 2)
 
-local warningPortal			= mod:NewAnnounce("warningPortal", 1, "135743")
-local warningBanish			= mod:NewAnnounce("warningBanish", 1, "136135")
+local warningPortal			= mod:NewAnnounce("warningPortal", 1, 135743)
+local warningBanish			= mod:NewAnnounce("warningBanish", 1, 136135)
 
 local specWarnVoid			= mod:NewSpecialWarningGTFO(30533, nil, nil, nil, 1, 6)
 
-local timerPortalPhase		= mod:NewTimer(60, "timerPortalPhase", "135743", nil, nil, 6)
-local timerBanishPhase		= mod:NewTimer(30, "timerBanishPhase", "136135", nil, nil, 6)
+local timerPortalPhase		= mod:NewTimer(60, "timerPortalPhase", 135743, nil, nil, 2)
+local timerBanishPhase		= mod:NewTimer(30, "timerBanishPhase", 136135, nil, nil, 2)
 
 local berserkTimer			= mod:NewBerserkTimer(540)
 
@@ -60,17 +60,6 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
-function mod:SPELL_CAST_SUCCESS(args)
-end
-
-function mod:SPELL_PERIODIC_DAMAGE(_, _, _, destGUID, _, _, spellId, spellName)
-	if spellId == 30533 and destGUID == UnitGUID("player") and self:AntiSpam() then
-		specWarnVoid:Show(spellName)
-		specWarnVoid:Play("watchfeet")
-	end
-end
-mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
-
 function mod:CHAT_MSG_MONSTER_EMOTE(msg)
 	if msg == L.DBM_NS_EMOTE_PHASE_2 or msg:find(L.DBM_NS_EMOTE_PHASE_2) then
 		timerPortalPhase:Cancel()
@@ -82,3 +71,16 @@ function mod:CHAT_MSG_MONSTER_EMOTE(msg)
 		timerPortalPhase:Start()
 	end
 end
+
+function mod:SPELL_CAST_SUCCESS(args)
+end
+
+function mod:SPELL_PERIODIC_DAMAGE(_, _, _, destGUID, _, _, spellId, spellName)
+	if spellId == 30533 and destGUID == UnitGUID("player") and self:AntiSpam() then
+		specWarnVoid:Show(spellName)
+		specWarnVoid:Play("watchfeet")
+	end
+end
+mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
+
+
